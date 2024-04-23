@@ -13,10 +13,10 @@ status.direction = Direction.OUTPUT
 
 led_pins = [
     board.IO21,
-    board.IO26, # type: ignore
+    board.IO26,  # type: ignore
     board.IO47,
-    board.IO33, #type: ignore
-    board.IO34, #type: ignore
+    board.IO33,  # type: ignore
+    board.IO34,  # type: ignore
     board.IO48,
     board.IO35,
     board.IO36,
@@ -46,27 +46,35 @@ def get_noise_levels():
             current_avg = sum(current_3_noise_levels) / len(current_3_noise_levels)
             current_3_noise_levels.clear()
             current_3_noise_levels.append(current_avg)
-
     return sum(current_3_noise_levels) / len(current_3_noise_levels)
 
 
 def turn_leds_on(leds, volume):
-    leds_to_turn_on = math.floor(
-        ((volume / ambient_noise_lvl)-1) * len(leds)
-    )
+    leds_to_turn_on = math.floor(((volume / ambient_noise_lvl) - 1) * len(leds))
     if leds_to_turn_on > len(leds):
         leds_to_turn_on = len(leds)
     elif leds_to_turn_on < 0:
         leds_to_turn_on = 0
     for i in range(leds_to_turn_on):
         leds[i].value = 1
-    for j in range(leds_to_turn_on + 1, len(leds)):
-        leds[j].value = 0
+    
 
 
 ambient_noise_lvl = get_noise_levels()
+previous_max_noise_lvl = microphone.value
+previousTime = time() 
+for led in leds: 
+    led.value=0
 
 # main loop
 while True:
+    currentTime = time()
     volume = microphone.value
-    turn_leds_on(leds, volume)
+    if volume > previous_max_noise_lvl:
+        turn_leds_on(leds, volume)
+        previous_max_noise_lvl = volume
+    elif volume < previous_max_noise_lvl: 
+        if currentTime - previousTime > 0.05:
+            previous_max_noise_lvl = volume
+            previousTime = currentTime
+            next((led for led in reversed(leds) if led.value == 1)).value = 0

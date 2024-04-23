@@ -12,8 +12,8 @@ vu_meter_case.stl
 vu_meter_lid.stl
 
 ### Changed
-main.py (forgot one pin)
-submission.mov (changed w updated code)
+main.py (changed w extra credit code)
+submission.mov (changed w extra credit code)
 
 
 ### Removed
