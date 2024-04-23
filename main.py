@@ -76,5 +76,6 @@ while True:
     elif volume < previous_max_noise_lvl: 
         if currentTime - previousTime > 0.05:
             previous_max_noise_lvl = volume
-            previousTime = currentTime
-            next((led for led in reversed(leds) if led.value == 1)).value = 0
+            previousTime = currentTime 
+            if(leds[0].value!=0):
+                next((led for led in reversed(leds) if led.value == 1)).value = 0
