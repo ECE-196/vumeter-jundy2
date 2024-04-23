@@ -13,7 +13,7 @@ vu_meter_lid.stl
 
 ### Changed
 main.py (forgot one pin)
-submission.mov 
+submission.mov (changed w updated code)
 
 
 ### Removed
